@@ -1,5 +1,8 @@
 package de.taskmanager.controller;
 
+import de.taskmanager.command.AddTaskCommand;
+import de.taskmanager.command.ChangeTaskStatusCommand;
+import de.taskmanager.command.CommandInvoker;
 import de.taskmanager.model.Priority;
 import de.taskmanager.model.Task;
 import de.taskmanager.model.TaskStatus;
@@ -13,10 +16,12 @@ public class TaskController {
 
     private final TaskService service;
     private final ConsoleView view;
+    private final CommandInvoker invoker;
 
-    public TaskController(TaskService service, ConsoleView view) {
+    public TaskController(TaskService service, ConsoleView view, CommandInvoker invoker) {
         this.service = service;
         this.view = view;
+        this.invoker = invoker;
     }
 
     public void run() {
@@ -29,12 +34,20 @@ public class TaskController {
             if (input.equals("1")) {
                 createTask();
             } else if (input.equals("2")) {
-                showAllTasks();
-            } else if (input.equals("3")) {
                 changeTaskStatus();
+            } else if (input.equals("3")) {
+                showAllTasks();
             } else if (input.equals("4")) {
+                showTasksSortedByPriority();
+            } else if (input.equals("5")){
                 findTaskById();
-            } else if (input.equals("0")) {
+            } else if (input.equals("6")){
+                showTasksByStatus();
+            } else if (input.equals("7")){
+                showStatistics();
+            } else if (input.equals("8")){
+                undoLastAction();
+            }else if (input.equals("0")) {
                 running = false;
             } else {
                 view.showMessage("Ungültige Auswahl.");
@@ -48,10 +61,7 @@ public class TaskController {
         String title = view.readTaskTitle();
         String description = view.readTaskDescription();
         Priority priority = view.readPriority();
-
-        Task task = service.createTask(title, description, priority);
-
-        view.showMessage("Aufgabe wurde erstellt: " + task.getTitle());
+        invoker.execute(new AddTaskCommand(service, title, description, priority));
     }
 
     public void showAllTasks() {
@@ -60,16 +70,13 @@ public class TaskController {
     }
 
     public void changeTaskStatus() {
-        int id = view.readTaskId();
+        int taskId = view.readTaskId();
         TaskStatus status = view.readTaskStatus();
 
-        boolean changed = service.changeTaskStatus(id, status);
+        invoker.execute(new ChangeTaskStatusCommand(service, taskId, status));
 
-        if (changed) {
-            view.showMessage("Status wurde geändert.");
-        } else {
-            view.showMessage("Keine Aufgabe mit dieser ID gefunden.");
-        }
+        view.showMessage("Statusänderung ausgeführt.");
+
     }
 
     public void findTaskById() {
@@ -81,6 +88,36 @@ public class TaskController {
             view.showTask(task.get());
         } else {
             view.showMessage("Keine Aufgabe mit dieser ID gefunden.");
+        }
+    }
+
+    public void showTasksByStatus() {
+        TaskStatus status = view.readTaskStatus();
+        List<Task> tasks = service.getTasksByStatus(status);
+        view.showTasks(tasks);
+    }
+
+    public void showTasksSortedByPriority() {
+        List<Task> tasks = service.getTasksSortedByPriority();
+        view.showTasks(tasks);
+    }
+
+    public void showStatistics() {
+        long total = service.countAllTasks();
+        long open = service.countTasksByStatus(TaskStatus.OPEN);
+        long inProgress = service.countTasksByStatus(TaskStatus.IN_PROGRESS);
+        long done = service.countTasksByStatus(TaskStatus.DONE);
+
+        view.showStatistics(total, open, inProgress, done);
+    }
+
+    public void undoLastAction() {
+        boolean undone = invoker.undo();
+
+        if (undone) {
+            view.showMessage("Letzte Aktion rückgängig gemacht.");
+        } else {
+            view.showMessage("Keine Aktion zum Rückgängigmachen vorhanden.");
         }
     }
 }

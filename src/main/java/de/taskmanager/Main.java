@@ -1,5 +1,6 @@
 package de.taskmanager;
 
+import de.taskmanager.command.CommandInvoker;
 import de.taskmanager.controller.TaskController;
 import de.taskmanager.repository.TaskRepository;
 import de.taskmanager.service.TaskService;
@@ -11,7 +12,9 @@ public class Main {
         TaskRepository repository = new TaskRepository();
         TaskService service = new TaskService(repository);
         ConsoleView view = new ConsoleView();
-        TaskController controller = new TaskController(service, view);
+        CommandInvoker invoker = new CommandInvoker();
+
+        TaskController controller = new TaskController(service, view, invoker);
 
         controller.run();
     }

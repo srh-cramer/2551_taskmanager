@@ -24,4 +24,8 @@ public class TaskRepository {
                 .filter(task -> task.getId() == id)
                 .findFirst();
     }
+
+    public boolean deleteById(int id) {
+        return tasks.removeIf(task -> task.getId() == id);
+    }
 }

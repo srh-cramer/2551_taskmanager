@@ -35,6 +35,10 @@ public class TaskService {
         return repository.findById(id);
     }
 
+    public boolean deleteTaskById(int id) {
+        return repository.deleteById(id);
+    }
+
     // Task-Status ändern
     // Gibt true bei Erfolg zurück, false wenn Task-ID nicht existiert
     public boolean changeTaskStatus(int id, TaskStatus status) {
@@ -46,5 +50,36 @@ public class TaskService {
 
         task.get().setStatus(status);
         return true;
+    }
+
+    public List<Task> getTasksByStatus(TaskStatus status) {
+        // stream() erzeugt Stream aus Liste
+        // filter() lässt nur Elemente mit passendem Status durch
+        // toList() sammelt passende Elemente in einer Liste
+        return repository.findAll().stream()
+                .filter(task -> task.getStatus() == status)
+                .toList();
+    }
+
+    public List<Task> getTasksSortedByPriority() {
+        // Achtug: sorted() sortiert in der Reihenfolge, in der die Enum-Werte deklariert wurden!
+        // Daher drehen wir die Sortierreihenfolge um
+        return repository.findAll().stream()
+                .sorted((task1, task2) ->
+                        task2.getPriority().compareTo(task1.getPriority()))
+                .toList();
+    }
+
+
+    public int countAllTasks() {
+        // Anzahl ohne Filterung mit size():
+        return repository.findAll().size();
+    }
+
+    public long countTasksByStatus(TaskStatus status) {
+        // Anzahl mit Filterung mit stream(), filter() und count():
+        return repository.findAll().stream()
+                .filter(task -> task.getStatus() == status)
+                .count();
     }
 }

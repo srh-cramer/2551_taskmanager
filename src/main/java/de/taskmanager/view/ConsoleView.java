@@ -15,9 +15,13 @@ public class ConsoleView {
         System.out.println();
         System.out.println("=== Task Manager ===");
         System.out.println("1 - Aufgabe erstellen");
-        System.out.println("2 - Alle Aufgaben anzeigen");
-        System.out.println("3 - Aufgabenstatus ändern");
-        System.out.println("4 - Aufgabe anhand der ID suchen");
+        System.out.println("2 - Aufgabenstatus ändern");
+        System.out.println("3 - Alle Aufgaben anzeigen");
+        System.out.println("4 - Aufgaben nach Priorität sortiert anzeigen");
+        System.out.println("5 - Aufgaben filtern nach: ID");
+        System.out.println("6 - Aufgaben filtern nach: Status");
+        System.out.println("7 - Statistiken anzeigen");
+        System.out.println("8 - Letzte Änderung rückgängig machen");
         System.out.println("0 - Beenden");
     }
 
@@ -76,7 +80,7 @@ public class ConsoleView {
 
     public TaskStatus readTaskStatus() {
         while (true) {
-            System.out.println("Neuen Status auswählen:");
+            System.out.println("Status auswählen:");
             System.out.println("1 - OPEN");
             System.out.println("2 - IN_PROGRESS");
             System.out.println("3 - DONE");
@@ -116,5 +120,14 @@ public class ConsoleView {
 
     public void showMessage(String message) {
         System.out.println(message);
+    }
+
+    public void showStatistics(long total, long open, long inProgress, long done) {
+        System.out.println();
+        System.out.println("=== Aufgabenstatistik ===");
+        System.out.println("Aufgaben insgesamt: " + total);
+        System.out.println("Offen:              " + open);
+        System.out.println("In Bearbeitung:     " + inProgress);
+        System.out.println("Erledigt:           " + done);
     }
 }
