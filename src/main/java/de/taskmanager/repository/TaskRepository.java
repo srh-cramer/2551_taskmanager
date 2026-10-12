@@ -18,6 +18,15 @@ public class TaskRepository {
         return new ArrayList<>(tasks);
     }
 
+    public Task findById(int id){
+        for (Task task : tasks){
+            if (task.getId() == id){
+                return task;
+            }
+        }
+        return null;
+    }
+
     public boolean deleteById(int id) {
         return tasks.removeIf(task -> task.getId() == id);
     }
