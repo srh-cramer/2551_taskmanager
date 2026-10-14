@@ -6,6 +6,7 @@ import de.taskmanager.model.TaskStatus;
 import de.taskmanager.repository.TaskRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public class TaskService {
 
@@ -35,15 +36,12 @@ public class TaskService {
     }
 
     public boolean changeTaskStatus(int id, TaskStatus status){
-        // 1. Task mit gegebener ID finden -> Task
-        if (repository.findById(id) != null){
-            Task task = repository.findById(id);
-            // 2. Status des gefundenen Tasks zum gegebenen Status verändern
-            task.setStatus(status);
+        Optional<Task> task = repository.findById(id);
+        if (task.isPresent()){
+            task.get().setStatus(status);
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
 }

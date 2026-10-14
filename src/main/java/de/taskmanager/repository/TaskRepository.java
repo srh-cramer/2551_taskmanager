@@ -4,6 +4,7 @@ import de.taskmanager.model.Task;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public class TaskRepository {
 
@@ -18,13 +19,10 @@ public class TaskRepository {
         return new ArrayList<>(tasks);
     }
 
-    public Task findById(int id){
-        for (Task task : tasks){
-            if (task.getId() == id){
-                return task;
-            }
-        }
-        return null;
+    public Optional<Task> findById(int id) {
+        return tasks.stream()
+                .filter(task -> task.getId() == id)
+                .findFirst();
     }
 
     public boolean deleteById(int id) {
