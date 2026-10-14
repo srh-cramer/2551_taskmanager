@@ -31,8 +31,8 @@ public class TaskController {
                 changeTaskStatus();
             } else if (input.equals("3")) {
                 showAllTasks();
-//            } else if (input.equals("4")) {
-//                showTasksSortedByPriority();
+            } else if (input.equals("4")) {
+                showTasksSortedByPriority();
 //            } else if (input.equals("5")){
 //                findTaskById();
 //            } else if (input.equals("6")){
@@ -71,5 +71,10 @@ public class TaskController {
         } else {
             view.showMessage("Statusänderung fehlgeschlagen.");
         }
+    }
+
+    public void showTasksSortedByPriority(){
+        List<Task> tasks = service.getTasksSortedByPriority();
+        view.showTasks(tasks);
     }
 }

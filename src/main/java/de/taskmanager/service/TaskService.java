@@ -44,4 +44,12 @@ public class TaskService {
         return false;
     }
 
+    public List<Task> getTasksSortedByPriority(){
+        List<Task> tasks = repository.findAll();
+        return tasks.stream()
+                .sorted((task1, task2) ->
+                        task2.getPriority().compareTo(task1.getPriority()))
+                .toList();
+    }
+
 }
