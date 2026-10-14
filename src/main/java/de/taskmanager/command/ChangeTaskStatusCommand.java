@@ -13,7 +13,6 @@ public class ChangeTaskStatusCommand implements Command{
     private final TaskStatus status;
 
     private TaskStatus previousStatus;
-    private boolean executedSuccessfully;
 
     public ChangeTaskStatusCommand(
             TaskService service,
@@ -26,7 +25,6 @@ public class ChangeTaskStatusCommand implements Command{
 
     @Override
     public void execute() {
-        executedSuccessfully = false;
 
         Optional<Task> taskOptional = service.findTaskById(taskId);
         if (taskOptional.isEmpty()) {
@@ -36,14 +34,13 @@ public class ChangeTaskStatusCommand implements Command{
         Task task = taskOptional.get();
         previousStatus = task.getStatus();
 
-        executedSuccessfully = service.changeTaskStatus(taskId, status);
+        service.changeTaskStatus(taskId, status);
     }
 
     @Override
     public void undo(){
         if (previousStatus != null){
             service.changeTaskStatus(taskId, previousStatus);
-            executedSuccessfully = false;
         }
     }
 }
