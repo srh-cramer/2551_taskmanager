@@ -66,8 +66,10 @@ public class TaskController {
     public void changeTaskStatus() {
         int taskId = view.readTaskId();
         TaskStatus status = view.readTaskStatus();
-        // TODO: Aufgabe 1
-        view.showMessage("Statusänderung ausgeführt.");
-
+        if (service.changeTaskStatus(taskId, status)) {
+            view.showMessage("Statusänderung ausgeführt.");
+        } else {
+            view.showMessage("Statusänderung fehlgeschlagen.");
+        }
     }
 }
