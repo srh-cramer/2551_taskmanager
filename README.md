@@ -352,4 +352,6 @@ Dieses befüllen Sie in der `execute()`-Methode mit dem aktuellen Status, bevor 
 * In der `undo()`-Methode müssen Sie erneut `service.changeTaskStatus()` aufrufen, nur diesmal mit dem Argument `previousStatus`, um den vorherigen Zustand wiederherzustellen.
 
 ### Erweiterungsvorschläge
-* Momentan wird nicht überprüft, ob die Statusänderung schon bereits einmal rückgängig gemacht wurde TODO
+Momentan wird das Ergebnis der Statusänderung ignoriert, d.h. auch bei Misserfolg bekommt der User die Rückmeldung, die Änderung sei ausgeführt worden.
+Das liegt daran, dass die Methode `execute()` keinen Rückgabewert hat, den der Controller verarbeiten könnte.
+Passen Sie Ihre Implementierung des Command-Patterns so an, dass `execute()` einen `boolean` als Rückgabetyp hat.
