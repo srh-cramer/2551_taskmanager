@@ -36,8 +36,8 @@ public class TaskController {
                 showTasksSortedByPriority();
             } else if (input.equals("5")){
                 findTaskById();
-//            } else if (input.equals("6")){
-//                showTasksByStatus();
+            } else if (input.equals("6")){
+                showTasksByStatus();
 //            } else if (input.equals("7")){
 //                showStatistics();
 //            } else if (input.equals("8")){
@@ -87,5 +87,11 @@ public class TaskController {
         } else {
             view.showMessage("Keine Aufgabe mit dieser ID gefunden");
         }
+    }
+
+    public void showTasksByStatus(){
+        TaskStatus status = view.readTaskStatus();
+        List<Task> tasks = service.getTasksByStatus(status);
+        view.showTasks(tasks);
     }
 }

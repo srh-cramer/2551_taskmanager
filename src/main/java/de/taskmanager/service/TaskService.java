@@ -56,4 +56,13 @@ public class TaskService {
                 .toList();
     }
 
+    public List<Task> getTasksByStatus(TaskStatus status) {
+        // stream() erzeugt Stream aus Liste
+        // filter() lässt nur Elemente mit passendem Status durch
+        // toList() sammelt passende Elemente in einer Liste
+        return repository.findAll().stream()
+                .filter(task -> task.getStatus() == status)
+                .toList();
+    }
+
 }
