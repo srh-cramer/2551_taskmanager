@@ -65,4 +65,10 @@ public class TaskService {
                 .toList();
     }
 
+    public int countTasksByStatus(TaskStatus status){
+        return (int) repository.findAll().stream() // Hole Liste aller Tasks
+                .filter(task -> task.getStatus() == status) // Benutze Stream, um im Liste nach Status zu filtern
+                .count(); // Zähle, wie viele Elemente im Stream sind
+    }
+
 }

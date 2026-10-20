@@ -38,8 +38,8 @@ public class TaskController {
                 findTaskById();
             } else if (input.equals("6")){
                 showTasksByStatus();
-//            } else if (input.equals("7")){
-//                showStatistics();
+            } else if (input.equals("7")){
+                showStatistics();
 //            } else if (input.equals("8")){
 //                undoLastAction();
             }else if (input.equals("0")) {
@@ -93,5 +93,18 @@ public class TaskController {
         TaskStatus status = view.readTaskStatus();
         List<Task> tasks = service.getTasksByStatus(status);
         view.showTasks(tasks);
+    }
+
+    public void showStatistics(){
+        // Rufe dreimal Methode service.countTasksByStatus auf
+        // Einmal pro Status
+        int countOpen = service.countTasksByStatus(TaskStatus.OPEN);
+        int countInProgress = service.countTasksByStatus(TaskStatus.IN_PROGRESS);
+        int countDone = service.countTasksByStatus(TaskStatus.DONE);
+        //int countTotal = countOpen + countInProgress + countDone;
+        int countTotal = service.getAllTasks().size();
+        // Gib Ergebnisse an View weiter
+        view.showStatistics(countTotal, countOpen, countInProgress, countDone);
+
     }
 }

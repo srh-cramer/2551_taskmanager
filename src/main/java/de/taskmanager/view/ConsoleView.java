@@ -20,7 +20,7 @@ public class ConsoleView {
         System.out.println("4 - Aufgaben nach Priorität sortiert anzeigen");
         System.out.println("5 - Aufgaben filtern nach: ID");
         System.out.println("6 - Aufgaben filtern nach: Status");
-//        System.out.println("7 - Statistiken anzeigen");
+        System.out.println("7 - Statistiken anzeigen");
 //        System.out.println("8 - Letzte Änderung rückgängig machen");
         System.out.println("0 - Beenden");
     }
@@ -120,5 +120,13 @@ public class ConsoleView {
 
     public void showMessage(String message) {
         System.out.println(message);
+    }
+
+    public void showStatistics(int total, int open, int inProgress, int closed){
+        System.out.println("=== Aufgabenstatistik ===\n" +
+                "Aufgaben insgesamt: " + total + "\n" +
+                "Offen:              " + open + "\n" +
+                "In Bearbeitung:     " + inProgress + "\n" +
+                "Erledigt:           " + closed);
     }
 }
