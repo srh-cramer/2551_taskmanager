@@ -35,6 +35,10 @@ public class TaskService {
         return repository.deleteById(id);
     }
 
+    public Optional<Task> findTaskById(int id){
+        return repository.findById(id);
+    }
+
     public boolean changeTaskStatus(int id, TaskStatus status){
         Optional<Task> task = repository.findById(id);
         if (task.isPresent()){

@@ -7,6 +7,7 @@ import de.taskmanager.service.TaskService;
 import de.taskmanager.view.ConsoleView;
 
 import java.util.List;
+import java.util.Optional;
 
 public class TaskController {
 
@@ -33,8 +34,8 @@ public class TaskController {
                 showAllTasks();
             } else if (input.equals("4")) {
                 showTasksSortedByPriority();
-//            } else if (input.equals("5")){
-//                findTaskById();
+            } else if (input.equals("5")){
+                findTaskById();
 //            } else if (input.equals("6")){
 //                showTasksByStatus();
 //            } else if (input.equals("7")){
@@ -76,5 +77,15 @@ public class TaskController {
     public void showTasksSortedByPriority(){
         List<Task> tasks = service.getTasksSortedByPriority();
         view.showTasks(tasks);
+    }
+
+    public void findTaskById(){
+        int id = view.readTaskId();
+        Optional<Task> task = service.findTaskById(id);
+        if (task.isPresent()){
+            view.showTask(task.get());
+        } else {
+            view.showMessage("Keine Aufgabe mit dieser ID gefunden");
+        }
     }
 }

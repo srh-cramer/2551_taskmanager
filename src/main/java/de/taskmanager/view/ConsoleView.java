@@ -18,7 +18,7 @@ public class ConsoleView {
         System.out.println("2 - Aufgabenstatus ändern");
         System.out.println("3 - Alle Aufgaben anzeigen");
         System.out.println("4 - Aufgaben nach Priorität sortiert anzeigen");
-//        System.out.println("5 - Aufgaben filtern nach: ID");
+        System.out.println("5 - Aufgaben filtern nach: ID");
 //        System.out.println("6 - Aufgaben filtern nach: Status");
 //        System.out.println("7 - Statistiken anzeigen");
 //        System.out.println("8 - Letzte Änderung rückgängig machen");
