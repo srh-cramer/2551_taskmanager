@@ -1,5 +1,9 @@
 package de.taskmanager.controller;
 
+import de.taskmanager.command.AddTaskCommand;
+import de.taskmanager.command.ChangeTaskStatusCommand;
+import de.taskmanager.command.Command;
+import de.taskmanager.command.CommandInvoker;
 import de.taskmanager.model.Priority;
 import de.taskmanager.model.Task;
 import de.taskmanager.model.TaskStatus;
@@ -13,10 +17,12 @@ public class TaskController {
 
     private final TaskService service;
     private final ConsoleView view;
+    private final CommandInvoker invoker;
 
-    public TaskController(TaskService service, ConsoleView view) {
+    public TaskController(TaskService service, ConsoleView view, CommandInvoker invoker) {
         this.service = service;
         this.view = view;
+        this.invoker = invoker;
     }
 
     public void run() {
@@ -40,8 +46,8 @@ public class TaskController {
                 showTasksByStatus();
             } else if (input.equals("7")){
                 showStatistics();
-//            } else if (input.equals("8")){
-//                undoLastAction();
+            } else if (input.equals("8")){
+                undoLastAction();
             }else if (input.equals("0")) {
                 running = false;
             } else {
@@ -56,7 +62,10 @@ public class TaskController {
         String title = view.readTaskTitle();
         String description = view.readTaskDescription();
         Priority priority = view.readPriority();
-        service.createTask(title, description, priority);
+        //service.createTask(title, description, priority);
+        Command createTaskCommand =
+                new AddTaskCommand(service, title, description, priority);
+        invoker.execute(createTaskCommand);
     }
 
     public void showAllTasks() {
@@ -67,11 +76,11 @@ public class TaskController {
     public void changeTaskStatus() {
         int taskId = view.readTaskId();
         TaskStatus status = view.readTaskStatus();
-        if (service.changeTaskStatus(taskId, status)) {
-            view.showMessage("Statusänderung ausgeführt.");
-        } else {
-            view.showMessage("Statusänderung fehlgeschlagen.");
-        }
+        //service.changeTaskStatus(taskId, status);
+        Command changeTaskStatusCommand =
+                new ChangeTaskStatusCommand(service, taskId, status);
+        invoker.execute(changeTaskStatusCommand);
+        view.showMessage("Statusänderung ausgeführt.");
     }
 
     public void showTasksSortedByPriority(){
@@ -106,5 +115,14 @@ public class TaskController {
         // Gib Ergebnisse an View weiter
         view.showStatistics(countTotal, countOpen, countInProgress, countDone);
 
+    }
+
+    public void undoLastAction(){
+        boolean success = invoker.undo();
+        if (success){
+            view.showMessage("Letzte Aktion rückgängig gemacht");
+        } else {
+            view.showMessage("Keine Aktion zum Rückgängig machen vorhanden.");
+        }
     }
 }
